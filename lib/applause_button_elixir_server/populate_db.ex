@@ -20,8 +20,9 @@ defmodule PopulateDB do
     end
 
     def run() do
-      "db/db.json"
-      |> File.read!()
+      req = Req.get!("https://raw.githubusercontent.com/fchabouis/applause_button_elixir_server/refs/heads/main/db/db.json")
+
+      req.body()
       |> Jason.decode!()
       |> Enum.map(fn d -> PopulateDB.transform_data(d) end)
       |> Enum.map(fn r -> Page.changeset(%Page{}, r) end)
