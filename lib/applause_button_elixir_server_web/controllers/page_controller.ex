@@ -5,6 +5,9 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
 
   def add_claps(conn, _params) do
     %{"url" => page_url} = conn.query_params
+    page_uri = URI.parse(page_url)
+    page_url = String.replace(page_url, "#{page_uri.scheme}://", "", global: false)
+
     {:ok, body, conn} = Plug.Conn.read_body(conn)
     [claps_to_add, _js_version] = body |> String.replace("\"", "") |> String.split(",")
     claps_to_add = String.to_integer(claps_to_add)
