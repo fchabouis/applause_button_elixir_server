@@ -3,11 +3,13 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   alias ApplauseButtonElixirServer.Repo
   alias ApplauseButtonElixirServer.Page
 
+  def clean_url(page_url) do
+    page_uri = URI.parse(page_url)
+    String.replace(page_url, "#{page_uri.scheme}://", "", global: false)
+  end
   def add_claps(conn, _params) do
     %{"url" => page_url} = conn.query_params
-    page_uri = URI.parse(page_url)
-    page_url = String.replace(page_url, "#{page_uri.scheme}://", "", global: false)
-
+    page_url = clean_url(page_url)
     {:ok, body, conn} = Plug.Conn.read_body(conn)
     [claps_to_add, _js_version] = body |> String.replace("\"", "") |> String.split(",")
     claps_to_add = String.to_integer(claps_to_add)
@@ -50,6 +52,8 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   end
 
   def get_claps(conn, %{"url" => url}) do
+    url = clean_url(url)
+
     n =
       case Page
            |> Repo.get_by(url: url) do
