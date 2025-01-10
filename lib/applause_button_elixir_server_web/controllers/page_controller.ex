@@ -3,12 +3,6 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   alias ApplauseButtonElixirServer.Repo
   alias ApplauseButtonElixirServer.Page
 
-  def home(conn, _params) do
-    # The home page is often custom made,
-    # so skip the default app layout.
-    render(conn, :home, layout: false)
-  end
-
   def add_claps(conn, _params) do
     %{"url" => page_url} = conn.query_params
     {:ok, body, conn} = Plug.Conn.read_body(conn)

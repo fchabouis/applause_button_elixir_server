@@ -18,7 +18,6 @@ defmodule ApplauseButtonElixirServerWeb.Router do
   scope "/", ApplauseButtonElixirServerWeb do
     pipe_through :api
 
-    get "/", PageController, :home
     post "/update-claps", PageController, :add_claps
     get "/get-claps", PageController, :get_claps
   end
