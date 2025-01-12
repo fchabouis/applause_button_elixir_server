@@ -42,7 +42,7 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
         %Page{claps: n, source_ip: _previous_source_ip} = page,
         source_ip,
         claps_to_add,
-        _page_url
+        page_url
       ) do
     Logger.info("claps from #{source_ip} recorded for #{page_url}")
 
