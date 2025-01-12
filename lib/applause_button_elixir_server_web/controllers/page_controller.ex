@@ -7,6 +7,7 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     page_uri = URI.parse(page_url)
     String.replace(page_url, "#{page_uri.scheme}://", "", global: false)
   end
+
   def add_claps(conn, _params) do
     %{"url" => page_url} = conn.query_params
     page_url = clean_url(page_url)
@@ -27,8 +28,12 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
         %Page{claps: n, source_ip: source_ip},
         source_ip,
         _claps_to_add,
-        _page_url
+        page_url
       ) do
+    Logger.info(
+      "claps from #{source_ip} not recorded for #{page_url} because last clap was from the same ip"
+    )
+
     # no db insertion as the current ip address is the same as the previously recorded one
     n
   end
@@ -39,12 +44,16 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
         claps_to_add,
         _page_url
       ) do
+    Logger.info("claps from #{source_ip} recorded for #{page_url}")
+
     updated_claps = n + claps_to_add
     Ecto.Changeset.change(page, %{claps: updated_claps, source_ip: source_ip})
     updated_claps
   end
 
   def increment_db_claps(nil, source_ip, claps_to_add, page_url) do
+    Logger.info("claps from #{source_ip} created for #{page_url}")
+
     %Page{claps: claps_to_add, source_ip: source_ip, url: page_url}
     |> Repo.insert()
 
