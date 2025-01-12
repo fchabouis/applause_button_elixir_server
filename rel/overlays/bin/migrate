@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+cd -P -- "$(dirname -- "$0")"
+exec ./applause_button_elixir_server eval ApplauseButtonElixirServer.Release.migrate
