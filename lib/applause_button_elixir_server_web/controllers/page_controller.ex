@@ -2,6 +2,7 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   use ApplauseButtonElixirServerWeb, :controller
   alias ApplauseButtonElixirServer.Repo
   alias ApplauseButtonElixirServer.Page
+  import Logger
 
   def clean_url(page_url) do
     page_uri = URI.parse(page_url)
