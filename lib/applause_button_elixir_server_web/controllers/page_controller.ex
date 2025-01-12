@@ -48,7 +48,9 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     Logger.info("claps from #{source_ip} recorded for #{page_url}")
 
     updated_claps = n + claps_to_add
-    Ecto.Changeset.change(page, %{claps: updated_claps, source_ip: source_ip})
+    page
+    |> Ecto.Changeset.change(%{claps: updated_claps, source_ip: source_ip})
+    |> Repo.update!()
     updated_claps
   end
 
