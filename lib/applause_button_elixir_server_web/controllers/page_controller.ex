@@ -19,8 +19,12 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     # user remote address is hidden by the fly.io proxy
     source_ip =
       case Plug.Conn.get_req_header(conn, "HTTP_FLY_CLIENT_IP") do
-        [ip] -> ip
-        _ -> conn.remote_ip |> :inet_parse.ntoa() |> to_string()
+        [ip] ->
+          ip
+
+        v ->
+          Logger.info(inspect(v))
+          conn.remote_ip |> :inet_parse.ntoa() |> to_string()
       end
 
     updated_claps =
