@@ -15,7 +15,13 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     {:ok, body, conn} = Plug.Conn.read_body(conn)
     [claps_to_add, _js_version] = body |> String.replace("\"", "") |> String.split(",")
     claps_to_add = String.to_integer(claps_to_add)
-    source_ip = to_string(:inet_parse.ntoa(conn.remote_ip))
+
+    # user remote address is hidden by the fly.io proxy
+    source_ip =
+      case Plug.Conn.get_req_header(conn, "HTTP_FLY_CLIENT_IP") do
+        [ip] -> ip
+        _ -> conn.remote_ip |> :inet_parse.ntoa() |> to_string()
+      end
 
     updated_claps =
       Page
