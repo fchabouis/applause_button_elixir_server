@@ -25,19 +25,20 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     text(conn, updated_claps)
   end
 
-  def increment_db_claps(
-        %Page{claps: n, source_ip: source_ip},
-        source_ip,
-        _claps_to_add,
-        page_url
-      ) do
-    Logger.info(
-      "claps from #{source_ip} not recorded for #{page_url} because last clap was from the same ip"
-    )
+  # functionnality deactivated for the moment, not sure it is useful
+  # def increment_db_claps(
+  #       %Page{claps: n, source_ip: source_ip},
+  #       source_ip,
+  #       _claps_to_add,
+  #       page_url
+  #     ) do
+  #   Logger.info(
+  #     "claps from #{source_ip} not recorded for #{page_url} because last clap was from the same ip"
+  #   )
 
-    # no db insertion as the current ip address is the same as the previously recorded one
-    n
-  end
+  #   # no db insertion as the current ip address is the same as the previously recorded one
+  #   n
+  # end
 
   def increment_db_claps(
         %Page{claps: n, source_ip: _previous_source_ip} = page,
@@ -48,9 +49,11 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     Logger.info("claps from #{source_ip} recorded for #{page_url}")
 
     updated_claps = n + claps_to_add
+
     page
     |> Ecto.Changeset.change(%{claps: updated_claps, source_ip: source_ip})
     |> Repo.update!()
+
     updated_claps
   end
 
