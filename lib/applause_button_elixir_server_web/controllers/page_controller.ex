@@ -10,7 +10,7 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     String.replace(page_url, "#{page_uri.scheme}://", "", global: false)
   end
 
-  def add_claps(%{"query_params" => %{"url" => page_url}} = conn, _params) do
+  def add_claps(%{query_params: %{"url" => page_url}} = conn, _params) do
     page_url = page_url |> clean_url()
     Logger.info("claps creation for #{page_url} from url parameter")
     add_claps_aux(conn, page_url)
