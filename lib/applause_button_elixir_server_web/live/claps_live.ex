@@ -12,7 +12,7 @@ defmodule ApplauseButtonElixirServerWeb.ClapsLive do
 
     <%= for page <- @latest_claps do %>
       {page.changed_minutes_ago} minutes ago => {page.url}
-      <br>
+      <br />
     <% end %>
     """
   end
@@ -32,9 +32,12 @@ defmodule ApplauseButtonElixirServerWeb.ClapsLive do
 
   def lastest_claps() do
     query = from p in Page, limit: 10, order_by: [desc: p.updated_at]
+
     query
     |> Repo.all()
-    |> Enum.map(fn %{url: url, updated_at: updated_at} -> %{url: url, changed_minutes_ago: time_ago(updated_at)} end)
+    |> Enum.map(fn %{url: url, updated_at: updated_at} ->
+      %{url: url, changed_minutes_ago: time_ago(updated_at)}
+    end)
   end
 
   def time_ago(datetime) do

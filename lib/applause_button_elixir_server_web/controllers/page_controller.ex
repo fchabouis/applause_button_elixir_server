@@ -4,7 +4,6 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   alias ApplauseButtonElixirServer.Page
   require Logger
 
-
   def clean_url(page_url) do
     page_uri = URI.parse(page_url)
     String.replace(page_url, "#{page_uri.scheme}://", "", global: false)
@@ -96,16 +95,19 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
 
   def get_claps(conn, %{"url" => page_url}) do
     Logger.info("get claps for #{page_url} from url parameter")
-    n = page_url
-    |> clean_url()
-    |> get_claps_from_db()
+
+    n =
+      page_url
+      |> clean_url()
+      |> get_claps_from_db()
 
     text(conn, n)
   end
 
   def get_claps(conn, _) do
-    page_url = conn
-    |> page_url_from_referer!()
+    page_url =
+      conn
+      |> page_url_from_referer!()
 
     Logger.info("get claps for #{page_url} from referer header")
 
