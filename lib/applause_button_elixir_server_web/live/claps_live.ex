@@ -22,11 +22,11 @@ defmodule ApplauseButtonElixirServerWeb.ClapsLive do
       :timer.send_interval(1000, self(), :refresh)
     end
 
-    {:ok, assign(socket, :latest_claps, lastest_claps())}
+    {:ok, assign(socket, latest_claps: lastest_claps())}
   end
 
   def handle_info(:refresh, socket) do
-    socket = assign(socket, :latest_claps, lastest_claps())
+    socket = assign(socket, latest_claps: lastest_claps())
     {:noreply, socket}
   end
 
