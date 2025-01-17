@@ -23,9 +23,11 @@ defmodule ApplauseButtonElixirServerWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", ApplauseButtonElixirServerWeb do
-  #   pipe_through :api
-  # end
+  scope "/live", ApplauseButtonElixirServerWeb do
+    pipe_through :browser
+
+    live "/", ClapsLive
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:applause_button_elixir_server, :dev_routes) do
