@@ -41,6 +41,6 @@ defmodule ApplauseButtonElixirServerWeb.ClapsLive do
   end
 
   def time_ago(datetime) do
-    Time.diff(Time.utc_now(), datetime, :minute)
+    DateTime.diff(DateTime.utc_now(), datetime, :minute)
   end
 end
