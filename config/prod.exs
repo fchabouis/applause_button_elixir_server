@@ -7,7 +7,7 @@ import Config
 # before starting your production server.
 config :applause_button_elixir_server, ApplauseButtonElixirServerWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
-  url: [host: "https://applause.chabouis.fr"]
+  url: [host: "applause.chabouis.fr", port: 443, scheme: "https"]
 
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: ApplauseButtonElixirServer.Finch
