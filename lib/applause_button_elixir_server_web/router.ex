@@ -23,7 +23,7 @@ defmodule ApplauseButtonElixirServerWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  scope "/live", ApplauseButtonElixirServerWeb do
+  scope "/live-claps", ApplauseButtonElixirServerWeb do
     pipe_through :browser
 
     live "/", ClapsLive
