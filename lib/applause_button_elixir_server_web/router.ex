@@ -15,7 +15,6 @@ defmodule ApplauseButtonElixirServerWeb.Router do
     plug :accepts, ["json"]
   end
 
-
   scope "/live-claps", ApplauseButtonElixirServerWeb do
     pipe_through :browser
 
@@ -28,8 +27,6 @@ defmodule ApplauseButtonElixirServerWeb.Router do
     post "/update-claps", PageController, :add_claps
     get "/get-claps", PageController, :get_claps
   end
-
-
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:applause_button_elixir_server, :dev_routes) do

@@ -4,11 +4,21 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   alias ApplauseButtonElixirServer.Page
   require Logger
 
+  @doc """
+  Remove the scheme part of the url.
+
+  iex> clean_url("https://applause.chabouis.fr")
+  "applause.chabouis.fr"
+
+  iex> clean_url("HTTP://applause.chabouis.fr")
+  "applause.chabouis.fr"
+  """
   def clean_url(page_url) do
     page_uri = URI.parse(page_url)
-    String.replace(page_url, "#{page_uri.scheme}://", "", global: false)
+    String.replace(page_url, ~r/^#{page_uri.scheme}:\/\//i, "", global: false)
   end
 
+  @spec add_claps(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def add_claps(%{query_params: %{"url" => page_url}} = conn, _params) do
     page_url = page_url |> clean_url()
     Logger.info("claps creation for #{page_url} from url parameter")
@@ -21,6 +31,12 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     add_claps_aux(conn, page_url)
   end
 
+  @doc """
+  Return a clean url from a conn referer.
+
+  iex>page_url_from_referer!(%Plug.Conn{req_headers: [{"referer", "https://exemple.com"}]})
+  "exemple.com"
+  """
   def page_url_from_referer!(conn) do
     case conn |> get_req_header("referer") do
       [page_url] -> clean_url(page_url)
