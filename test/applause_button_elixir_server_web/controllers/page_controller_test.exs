@@ -1,6 +1,8 @@
 defmodule ApplauseButtonElixirServerWeb.PageControllerTest do
   # alias Phoenix.LiveView.Plug
   use ApplauseButtonElixirServerWeb.ConnCase
+  alias ApplauseButtonElixirServer.ClapCountRequest
+  alias ApplauseButtonElixirServer.Repo
 
   doctest ApplauseButtonElixirServerWeb.PageController, import: true
 
@@ -30,6 +32,9 @@ defmodule ApplauseButtonElixirServerWeb.PageControllerTest do
     conn_3 = get(conn, ~p"/get-claps?url=#{url}")
     response = response(conn_3, 200)
     assert response == "3"
+
+    # check the clap count request has been logged
+    assert ClapCountRequest |> Repo.all() |> length() == 1
   end
 
   test "post clap using referer", %{conn: conn} do
@@ -64,5 +69,8 @@ defmodule ApplauseButtonElixirServerWeb.PageControllerTest do
 
     response = response(conn_3, 200)
     assert response == "3"
+
+    # check the clap count request has been logged
+    assert ClapCountRequest |> Repo.all() |> length() == 1
   end
 end

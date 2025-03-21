@@ -2,6 +2,7 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   use ApplauseButtonElixirServerWeb, :controller
   alias ApplauseButtonElixirServer.Repo
   alias ApplauseButtonElixirServer.Page
+  alias ApplauseButtonElixirServer.ClapCountRequest
   require Logger
 
   @doc """
@@ -49,16 +50,7 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     [claps_to_add, _js_version] = body |> String.replace("\"", "") |> String.split(",")
     claps_to_add = String.to_integer(claps_to_add)
 
-    # user remote address is hidden by the fly.io proxy
-    source_ip =
-      case Plug.Conn.get_req_header(conn, "HTTP_FLY_CLIENT_IP") do
-        [ip] ->
-          ip
-
-        v ->
-          Logger.info(inspect(v))
-          conn.remote_ip |> :inet_parse.ntoa() |> to_string()
-      end
+    source_ip = get_source_ip(conn)
 
     updated_claps =
       Page
@@ -66,6 +58,18 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
       |> increment_db_claps(source_ip, claps_to_add, page_url)
 
     text(conn, updated_claps)
+  end
+
+  def get_source_ip(conn) do
+    # user remote address is hidden by the fly.io proxy
+    case Plug.Conn.get_req_header(conn, "HTTP_FLY_CLIENT_IP") do
+      [ip] ->
+        ip
+
+      v ->
+        Logger.info(inspect(v))
+        conn.remote_ip |> :inet_parse.ntoa() |> to_string()
+    end
   end
 
   # functionnality deactivated for the moment, not sure it is useful
@@ -112,10 +116,12 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   def get_claps(conn, %{"url" => page_url}) do
     Logger.info("get claps for #{page_url} from url parameter")
 
-    n =
+    %{claps: n, page_id: page_id} =
       page_url
       |> clean_url()
       |> get_claps_from_db()
+
+    log_clap_request(page_id, conn)
 
     text(conn, n)
   end
@@ -127,7 +133,9 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
 
     Logger.info("get claps for #{page_url} from referer header")
 
-    n = page_url |> get_claps_from_db()
+    %{claps: n, page_id: page_id} = page_url |> get_claps_from_db()
+    log_clap_request(page_id, conn)
+
     text(conn, n)
   end
 
@@ -135,7 +143,14 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
     case Page
          |> Repo.get_by(url: url) do
       nil -> 0
-      %{claps: n} -> n
+      %{claps: n, id: page_id} -> %{claps: n, page_id: page_id}
     end
+  end
+
+  def log_clap_request(page_id, conn) do
+    source_ip = get_source_ip(conn)
+
+    %ClapCountRequest{page_id: page_id, source_ip: source_ip}
+    |> Repo.insert()
   end
 end
