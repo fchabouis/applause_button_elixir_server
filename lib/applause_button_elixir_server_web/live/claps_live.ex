@@ -6,25 +6,24 @@ defmodule ApplauseButtonElixirServerWeb.ClapsLive do
 
   def render(assigns) do
     ~H"""
-    <h1 class="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Latest claps</h1>
+    <h1 class="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+      Latest claps
+    </h1>
 
     <ul role="list" class="divide-y divide-gray-100 pt-12">
       <%= for page <- @latest_claps do %>
         <li class="flex justify-between gap-x-6 py-5">
-        <div class="flex min-w-0 gap-x-4">
-          <a href={page.url}>{page.url}</a>
-        </div>
-        <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-        <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{page.changed_minutes_ago} min ago</span>
-        </div>
-      </li>
-        <% end %>
-        </ul>
-
-
-
-
-
+          <div class="flex min-w-0 gap-x-4">
+            <a href={page.url}>{page.url}</a>
+          </div>
+          <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+            <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+              {page.changed_minutes_ago} min ago
+            </span>
+          </div>
+        </li>
+      <% end %>
+    </ul>
     """
   end
 
