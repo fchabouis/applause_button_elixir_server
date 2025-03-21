@@ -6,7 +6,7 @@ A public instance of the server is provided at [applause.chabouis.fr](https://ap
 
 Some information about the reason for this alternative server's existence can be found [here](https://github.com/ColinEberhardt/applause-button/issues/101#issuecomment-2586541340).
 
-See the claps in [live](https://applause.chabouis.fr/live-claps)
+See the claps in [live](https://applause.chabouis.fr/live-claps)!
 
 ## local development
 
