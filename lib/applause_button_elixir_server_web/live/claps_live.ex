@@ -33,7 +33,7 @@ defmodule ApplauseButtonElixirServerWeb.ClapsLive do
       <%= for page <- @latest_visits do %>
         <li class="flex justify-between gap-x-6 py-5">
           <div class="flex min-w-0 gap-x-4">
-            <a href={page.url}>{page.url}</a>
+            <a href={"https://#{page.url}"} target="_blank">{page.url}</a>
           </div>
           <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
             <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
