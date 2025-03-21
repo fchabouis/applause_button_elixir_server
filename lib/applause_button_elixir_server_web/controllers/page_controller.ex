@@ -142,10 +142,12 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   def get_claps_from_db(url) do
     case Page
          |> Repo.get_by(url: url) do
-      nil -> 0
+      nil -> %{claps: 0, page_id: nil}
       %{claps: n, id: page_id} -> %{claps: n, page_id: page_id}
     end
   end
+
+  def log_clap_request(nil, _conn), do: nil
 
   def log_clap_request(page_id, conn) do
     source_ip = get_source_ip(conn)

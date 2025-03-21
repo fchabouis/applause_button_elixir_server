@@ -73,4 +73,16 @@ defmodule ApplauseButtonElixirServerWeb.PageControllerTest do
     # check the clap count request has been logged
     assert ClapCountRequest |> Repo.all() |> length() == 1
   end
+
+  test "get clap count for non existing page", %{conn: conn} do
+    url = "https://exemple.com/unknown-page"
+
+    # get claps count using request referer
+    conn =
+      conn
+      |> get(~p"/get-claps?url=#{url}")
+
+    response = response(conn, 200)
+    assert response == "0"
+  end
 end
