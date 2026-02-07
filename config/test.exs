@@ -6,10 +6,7 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :applause_button_elixir_server, ApplauseButtonElixirServer.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "applause_button_elixir_server_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: Path.expand("../applause_button_elixir_server_test#{System.get_env("MIX_TEST_PARTITION")}.db", __DIR__),
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 

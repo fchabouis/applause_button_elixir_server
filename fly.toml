@@ -15,6 +15,11 @@ kill_signal = 'SIGTERM'
 [env]
   PHX_HOST = 'applause-button-elixir-server.fly.dev'
   PORT = '8080'
+  DATABASE_PATH = '/app/data/applause_button_elixir_server.db'
+
+[mounts]
+  source = "data"
+  destination = "/app/data"
 
 [http_service]
   internal_port = 8080

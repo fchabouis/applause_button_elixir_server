@@ -3,6 +3,7 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   alias ApplauseButtonElixirServer.Repo
   alias ApplauseButtonElixirServer.Page
   alias ApplauseButtonElixirServer.ClapCountRequest
+  import Ecto.Query
   require Logger
 
   @doc """
@@ -88,20 +89,22 @@ defmodule ApplauseButtonElixirServerWeb.PageController do
   # end
 
   def increment_db_claps(
-        %Page{claps: n, source_ip: _previous_source_ip} = page,
+        %Page{id: id, claps: n},
         source_ip,
         claps_to_add,
         page_url
       ) do
     Logger.info("claps from #{source_ip} recorded for #{page_url}")
 
-    updated_claps = n + claps_to_add
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
 
-    page
-    |> Ecto.Changeset.change(%{claps: updated_claps, source_ip: source_ip})
-    |> Repo.update!()
+    from(p in Page,
+      where: p.id == ^id,
+      update: [inc: [claps: ^claps_to_add], set: [source_ip: ^source_ip, updated_at: ^now]]
+    )
+    |> Repo.update_all([])
 
-    updated_claps
+    n + claps_to_add
   end
 
   def increment_db_claps(nil, source_ip, claps_to_add, page_url) do

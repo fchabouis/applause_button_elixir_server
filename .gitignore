@@ -35,3 +35,8 @@ applause_button_elixir_server-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# SQLite database files
+*.db
+*.db-wal
+*.db-shm
+
