@@ -11,6 +11,7 @@ defmodule PopulateDB do
   """
   def run do
     Req.get!(@json_url).body
+    |> Jason.decode!()
     |> Map.fetch!("pages")
     |> Enum.each(fn row ->
       %Page{}
