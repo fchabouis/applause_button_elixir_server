@@ -2,15 +2,15 @@ defmodule PopulateDB do
   alias ApplauseButtonElixirServer.Repo
   alias ApplauseButtonElixirServer.Page
 
-  @doc """
-  Import pages from a DBeaver JSON export file.
+  @json_url "https://raw.githubusercontent.com/fchabouis/applause_button_elixir_server/refs/heads/main/pages_202602071738.json"
 
-  Usage: PopulateDB.run("/path/to/pages_export.json")
+  @doc """
+  Import pages from the GitHub JSON export.
+
+  Usage: PopulateDB.run()
   """
-  def run(file_path) do
-    file_path
-    |> File.read!()
-    |> Jason.decode!()
+  def run do
+    Req.get!(@json_url).body
     |> Map.fetch!("pages")
     |> Enum.each(fn row ->
       %Page{}
